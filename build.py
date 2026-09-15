@@ -57,11 +57,23 @@ def guardar_column_map(mapa):
         json.dump(mapa, f, ensure_ascii=False, indent=2, sort_keys=True)
 
 
-def generar_codigo(nombre_normalizado, usados):
-    palabras = [p for p in nombre_normalizado.split(' ') if p]
-    base = ''.join(p[0] for p in palabras).upper() or 'X'
+def limpiar_codigo(header_text):
+    """Deja el encabezado tal como viene en el PDF (TIT, OT, AT...),
+    sólo le sacan acentos y caracteres raros. Si el PDF ya trae la
+    columna abreviada -que es lo habitual en estos listados- el
+    resultado es exactamente esa sigla, sin inventar una nueva."""
+    txt = unicodedata.normalize('NFKD', header_text or '')
+    txt = ''.join(ch for ch in txt if not unicodedata.combining(ch))
+    txt = re.sub(r'[^A-Za-z0-9]', '', txt)
+    return txt.upper()
+
+
+def generar_codigo(header_text, usados):
+    base = limpiar_codigo(header_text) or 'X'
     codigo = base
     i = 2
+    # Sólo se agrega un número si esa sigla ya está tomada por OTRO
+    # encabezado distinto (colisión real), no como paso obligatorio.
     while codigo in usados or codigo in RESERVADAS:
         codigo = f'{base}{i}'
         i += 1
@@ -75,7 +87,7 @@ def clave_para_columna(header_text, column_map, usados):
     norm = normalizar(header_text)
     if norm in column_map:
         return column_map[norm]
-    codigo = generar_codigo(norm, usados)
+    codigo = generar_codigo(header_text, usados)
     column_map[norm] = codigo
     usados.add(codigo)
     return codigo
