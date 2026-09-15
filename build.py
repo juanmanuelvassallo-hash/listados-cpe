@@ -272,8 +272,9 @@ body{{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgro
   padding:16px;margin-bottom:12px;position:relative;overflow:hidden;}}
 .cargo-card::before{{content:'';position:absolute;top:0;left:0;right:0;height:3px;
   background:linear-gradient(90deg,#4f46e5,#7c3aed);}}
-.cargo-name{{font-size:13px;font-weight:700;color:#818cf8;margin-bottom:12px;
+.cargo-name{{font-size:13px;font-weight:700;color:#818cf8;margin-bottom:2px;
   text-transform:uppercase;letter-spacing:0.3px;padding-top:4px;}}
+.cargo-src{{font-size:10px;color:#64748b;margin-bottom:12px;letter-spacing:0.3px;}}
 
 .pos-row{{display:flex;align-items:center;gap:12px;margin-bottom:10px;}}
 .pos-circle{{width:56px;height:56px;border-radius:50%;
@@ -426,6 +427,7 @@ function buscar() {{
     for (const r of resultados) {{
       html += `<div class="cargo-card">
         <div class="cargo-name">${{r.c}}</div>
+        <div class="cargo-src">${{fmtSrc(r.src)}}</div>
         <div class="pos-row">
           <div class="pos-circle">
             <div class="pos-num">${{r.o}}</div>
@@ -480,7 +482,7 @@ function buscarMulti() {{
           <div class="m-pos">${{r.o}}</div>
           <div>
             <div class="m-nombre">${{r.n||''}}</div>
-            <div class="m-dni-lbl">DNI: ${{fmtDNI(r.d)}} · de ${{r.tot}}</div>
+            <div class="m-dni-lbl">DNI: ${{fmtDNI(r.d)}} · de ${{r.tot}} · ${{fmtSrc(r.src)}}</div>
             ${{i===0?'<span class="ganador-badge">✓ Mejor</span>':''}}
           </div>
           <div class="m-pje-val">${{r.P||'—'}}</div>
@@ -494,6 +496,10 @@ function buscarMulti() {{
 
 function dsgl(lbl, val) {{
   return `<div class="dsgl-item"><div class="dsgl-lbl">${{lbl}}</div><div class="dsgl-val">${{val}}</div></div>`;
+}}
+function fmtSrc(src) {{
+  if (!src) return '';
+  return src.replace(/\\.pdf$/i, '').replace(/[-_]+/g, ' ').trim();
 }}
 function fmtDNI(d) {{ return (d||'').replace(/\\B(?=(\\d{{3}})+(?!\\d))/g,'.'); }}
 function toast(msg) {{
