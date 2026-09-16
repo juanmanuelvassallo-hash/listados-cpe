@@ -217,7 +217,7 @@ def generar_html(registros, fuentes, column_map):
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<title>Buscador de Listados — CPE Santa Cruz</title>
+<title>Buscador de Listados — Río Gallegos, Santa Cruz</title>
 <style>
 *{{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}}
 body{{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f172a;min-height:100vh;color:#e2e8f0;}}
@@ -337,7 +337,7 @@ body{{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgro
 
 <div class="header">
   <h1>🎓 Buscador de Listados</h1>
-  <p>CPE Santa Cruz — {subtitulo_listados}</p>
+  <p>Río Gallegos - Santa Cruz - listado de nivel secundario</p>
   <p class="autor">👤 Desarrollado por Mg. Vassallo</p>
 </div>
 
