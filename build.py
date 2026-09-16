@@ -205,6 +205,7 @@ def generar_html(registros, fuentes, column_map):
 
     data_json = json.dumps(registros, ensure_ascii=False, separators=(',', ':'))
     desglose_json = json.dumps(desglose_cols, ensure_ascii=False, separators=(',', ':'))
+    fuentes_json = json.dumps(fuentes, ensure_ascii=False, separators=(',', ':'))
 
     n_listados = len(fuentes)
     subtitulo_listados = (f"{n_listados} listado{'s' if n_listados != 1 else ''} combinado{'s' if n_listados != 1 else ''}")
@@ -229,6 +230,7 @@ body{{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgro
 }}
 .header h1{{font-size:18px;font-weight:700;color:white;letter-spacing:-0.3px;}}
 .header p{{font-size:11px;color:rgba(255,255,255,0.7);margin-top:3px;}}
+.header .autor{{font-size:11px;color:rgba(255,255,255,0.85);margin-top:6px;font-weight:600;letter-spacing:0.3px;}}
 
 .search-wrap{{padding:16px;background:#1e293b;border-bottom:1px solid #334155;}}
 
@@ -261,6 +263,9 @@ body{{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgro
 .empty-icon{{font-size:56px;margin-bottom:16px;}}
 .empty-title{{font-size:18px;font-weight:600;color:#64748b;margin-bottom:8px;}}
 .empty-sub{{font-size:13px;line-height:1.5;}}
+.fuentes-list{{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:16px;}}
+.fuente-tag{{background:#1e293b;border:1px solid #334155;color:#94a3b8;font-size:11px;
+  padding:5px 10px;border-radius:20px;}}
 
 .stats-badge{{background:#1e293b;border:1px solid #334155;border-radius:12px;
   padding:14px 16px;margin-bottom:12px;border-left:4px solid #6366f1;}}
@@ -333,6 +338,7 @@ body{{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgro
 <div class="header">
   <h1>🎓 Buscador de Listados</h1>
   <p>CPE Santa Cruz — {subtitulo_listados}</p>
+  <p class="autor">👤 Desarrollado por Mg. Vassallo</p>
 </div>
 
 <div class="search-wrap">
@@ -366,14 +372,16 @@ body{{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgro
 
 <div class="toast" id="toast"></div>
 
-<footer style="text-align:center;padding:24px 16px 32px;border-top:1px solid #1e293b;margin-top:8px;">
-  <span style="font-size:12px;color:#334155;letter-spacing:0.5px;">by <strong style="color:#4f46e5;">Mg. Vassallo</strong></span>
+<footer style="text-align:center;padding:28px 16px 36px;border-top:1px solid #1e293b;margin-top:8px;">
+  <div style="font-size:12px;color:#64748b;">Desarrollado por</div>
+  <div style="font-size:17px;font-weight:800;color:#818cf8;margin-top:3px;letter-spacing:0.2px;">Mg. Juan Manuel Vassallo</div>
 </footer>
 
 <script>
 const DATA = {data_json};
 const DESGLOSE_COLS = {desglose_json};
 const N_CARGOS = {len(cargos)};
+const FUENTES = {fuentes_json};
 
 const idx = {{}};
 for (const r of DATA) {{
@@ -394,6 +402,9 @@ function switchTab(tab) {{
 }}
 
 function emptyState() {{
+  const listado = FUENTES.length
+    ? `<div class="fuentes-list">${{FUENTES.map(f => `<span class="fuente-tag">${{fmtSrc(f)}}</span>`).join('')}}</div>`
+    : '';
   return `<div class="empty-state">
     <div class="empty-icon">🗂️</div>
     <div class="empty-title">{subtitulo_listados}</div>
@@ -401,6 +412,7 @@ function emptyState() {{
       <strong style="color:#818cf8;">${{DATA.length.toLocaleString()}}</strong> docentes cargados<br>
       en <strong style="color:#818cf8;">${{N_CARGOS}}</strong> cargos distintos
     </div>
+    ${{listado}}
   </div>`;
 }}
 
